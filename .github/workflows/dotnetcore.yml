@@ -32,7 +32,7 @@ jobs:
         output: 'lcov.info'
         outputFormat: 'lcov'                    
     - name: dotnet publish            
-      run: dotnet ${{MAIN_CSPROJ}} -c Release -o release --nologo      
+      run: dotnet -c Release -o release --nologo      
     - name: refresh coverage badge
       uses: fjogeleit/http-request-action@master
       with:
