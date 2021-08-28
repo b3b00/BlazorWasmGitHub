@@ -24,14 +24,8 @@ jobs:
         include-prerelease: true
     - name: Clean artifacts and nugets 
       run: dotnet clean  --configuration Release && dotnet nuget locals all --clear   
-    - name: Test with dotnet
-      uses: b3b00/coverlet-action@1.1.0
-      id: 'coverlet'
-      if: env.RUN_TESTS
-      with:
-        testProject: ${{env.TESTS_PROJECT}}
-        output: 'lcov.info'
-        outputFormat: 'lcov'                    
+    -name: innfor
+      Run: dotnet --info                    
     - name: dotnet publish            
       run: dotnet -c Release -o release --nologo      
     - name: refresh coverage badge
