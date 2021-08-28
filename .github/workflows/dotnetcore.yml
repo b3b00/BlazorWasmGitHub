@@ -21,7 +21,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '6.0.x'
-        include-prelease: true
+        include-prerelease: true
     - name: Clean artifacts and nugets 
       run: dotnet clean  --configuration Release && dotnet nuget locals all --clear   
     - name: Test with dotnet
