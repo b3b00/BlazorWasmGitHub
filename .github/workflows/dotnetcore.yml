@@ -11,13 +11,10 @@ jobs:
   build:
     env:
       TESTS_PROJECT: 'GrpahTests/GrpahTest.csproj.csproj' # path to test project or solution
-      PUBLISH_NUGET: true # if true a nuget will be published on version change
+      PUBLISH_NUGET: false # if true a nuget will be published on version change
       RUN_TESTS: true # if true tests are run and coverage data is published to coveralls and a coverage report is produced.
       MAIN_CSPROJ: 'Client/Client.csproj' # main project (for nuget packaging)
-    runs-on: ${{ matrix.os }}
-    strategy:
-        matrix:
-          os: [ubuntu-latest]
+    runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -25,9 +22,7 @@ jobs:
       with:
         dotnet-version: 3.1.101      
     - name: Clean artifacts and nugets 
-      run: dotnet clean  --configuration Release && dotnet nuget locals all --clear
-    - name: Build with dotnet 
-      run: dotnet build --configuration Release     
+      run: dotnet clean  --configuration Release && dotnet nuget locals all --clear   
     - name: Test with dotnet
       uses: b3b00/coverlet-action@1.1.0
       id: 'coverlet'
@@ -35,31 +30,17 @@ jobs:
       with:
         testProject: ${{env.TESTS_PROJECT}}
         output: 'lcov.info'
-        outputFormat: 'lcov'                
-    - name: Create Release
-      if: ${{ success() && matrix.os == 'windows-latest' && steps.publish_nuget.outputs.VERSION != ''  && steps.publish_nuget.outputs.VERSION != null }}
-      id: create_release
-      uses: actions/create-release@latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.publish_nuget.outputs.VERSION }}
-        release_name: Release ${{ steps.publish_nuget.outputs.VERSION }}
-        draft: false
-        prerelease: false
-    - name: Upload Release Asset
-      if: ${{ success() && matrix.os == 'windows-latest' && steps.create_release.outputs.upload_url != ''  && steps.create_release.outputs.upload_url != null }}
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ steps.publish_nuget.outputs.PACKAGE_PATH }}
-        asset_name: ${{ steps.publish_nuget.outputs.PACKAGE_NAME }}
-        asset_content_type: application/zip
+        outputFormat: 'lcov'                    
+    - name: dotnet publish            
+      run: dotnet ${{MAIN_CSPROJ}} -c Release -o release --nologo      
     - name: refresh coverage badge
       uses: fjogeleit/http-request-action@master
       with:
         url: https://camo.githubusercontent.com/12c4fcb3b21fbb2a725fc61449fb1b91e972c4c8a2baaf5904936d8e334bdbe8/68747470733a2f2f636f766572616c6c732e696f2f7265706f732f6769746875622f62336230302f63736c792f62616467652e7376673f6272616e63683d64657626736572766963653d676974687562
         method: PURGE
+    - name: Commit wwwroot to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: release/wwwroot
