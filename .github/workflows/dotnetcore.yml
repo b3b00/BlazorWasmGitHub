@@ -25,7 +25,7 @@ jobs:
     - name: Clean artifacts and nugets 
       run: dotnet clean  --configuration Release && dotnet nuget locals all --clear   
     -name: innfor
-      Run: dotnet --info                    
+      run: dotnet --info                    
     - name: dotnet publish            
       run: dotnet -c Release -o release --nologo      
     - name: refresh coverage badge
