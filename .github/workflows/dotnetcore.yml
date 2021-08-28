@@ -25,7 +25,9 @@ jobs:
     - name: Clean artifacts and nugets 
       run: dotnet clean  --configuration Release && dotnet nuget locals all --clear   
     - name: innfo
-      run: dotnet --info                    
+      run: dotnet --info     
+    - name: aot workload
+      run: dotnet workload install microsoft-net-sdk-blazorwebassembly-aot      
     - name: dotnet publish            
       run: dotnet publish -c Release -o release --nologo      
     - name: Commit wwwroot to GitHub Pages
