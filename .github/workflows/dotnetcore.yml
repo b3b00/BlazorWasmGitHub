@@ -24,7 +24,7 @@ jobs:
         include-prerelease: true
     - name: Clean artifacts and nugets 
       run: dotnet clean  --configuration Release && dotnet nuget locals all --clear   
-    -name: innfor
+    - name: innfo
       run: dotnet --info                    
     - name: dotnet publish            
       run: dotnet -c Release -o release --nologo      
