@@ -14,7 +14,7 @@ jobs:
       PUBLISH_NUGET: false # if true a nuget will be published on version change
       RUN_TESTS: true # if true tests are run and coverage data is published to coveralls and a coverage report is produced.
       MAIN_CSPROJ: 'Client/Client.csproj' # main project (for nuget packaging)
-    runs-on: ubuntu-latest    
+    runs-on: windows-latest    
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
