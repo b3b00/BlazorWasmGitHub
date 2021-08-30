@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   
-  <RunAOTCompilation>true</RunAOTCompilation>
+  <!-- <RunAOTCompilation>true</RunAOTCompilation> -->
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.1.2" />
