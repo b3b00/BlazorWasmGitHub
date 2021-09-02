@@ -57,6 +57,10 @@
 
 @code {
 
+    private bool snackOpened;
+
+    private string snackMessage;
+    
     private BrowserWindowSize Browser = new();
 
     private static Dictionary<string, (Func<double, double?> function, string color)> Formulas = new();
@@ -66,6 +70,8 @@
     private int Width = 750;
 
     private int Height = 500;
+
+    private string Svg;
 
     private string Grid;
 
@@ -118,24 +124,39 @@
 
     private async Task AddFormula()
     {
-        await DrawGrid();
-        if (!string.IsNullOrEmpty(Formula))
+        try
         {
-            var ast = _parser.Parse(Formula);
-            if (ast.IsOk)
+            await DrawGrid();
+            if (!string.IsNullOrEmpty(Formula))
             {
-                Func<double, double?> function = (x) =>
+                var ast = _parser.Parse(Formula);
+                if (ast.IsOk)
                 {
-                    var context = new ExpressionContext(new Dictionary<string, double>() { { "x", x } });
-                    return ast.Result.Evaluate(context);
-                };
+                    Func<double, double?> function = (x) =>
+                    {
+                        var context = new ExpressionContext(new Dictionary<string, double>() { { "x", x } });
+                        return ast.Result.Evaluate(context);
+                    };
 
-                Formulas[Formula] = (function,Colors[ColorIndex]);
-                await SaveFormulas();
+                    Formulas[Formula] = (function,Colors[ColorIndex]);
+                    await SaveFormulas();
 
-                await Draw(Colors[ColorIndex], function, Formula);
-                ColorIndex = ColorIndex == Colors.Length - 1 ? 0 : ColorIndex + 1;
+                    await Draw(Colors[ColorIndex], function, Formula);
+                    ColorIndex = ColorIndex == Colors.Length - 1 ? 0 : ColorIndex + 1;
+                }
+                else
+                {
+                    snackOpened = true;
+                    var errors = string.Join("\n", ast.Errors.Select(x => x.ErrorMessage));
+                    snackMessage = errors;
+    // TODO toast 
+                }
             }
+        }
+        catch (Exception e)
+        {
+            snackMessage = e.Message;
+            snackOpened = true;
         }
         StateHasChanged();
     }
@@ -166,6 +187,7 @@
 
     protected async Task ClearCanvas()
     {
+        Svg = "";
         Grid = "";
         Graphs = "";
         if (ShowGrid)
@@ -198,12 +220,8 @@
             webAssemblyJSRuntime.InvokeUnmarshalled<string, string, byte[], bool>("BlazorDownloadFileFast", fileName, contentType, file);
             return;
         }
-        else
-        {
     // Fall back to the slow method if not in WebAssembly
-            await JSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, contentType, file);
-            return;
-        }
+        await JSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, contentType, file);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
