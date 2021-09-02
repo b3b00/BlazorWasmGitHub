@@ -1,0 +1,8 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="_content/BlazorPro.BlazorSize" Path="/home/olivier/.nuget/packages/blazorpro.blazorsize/5.0.0/staticwebassets/" />
+  <ContentRoot BasePath="_content/MatBlazor" Path="/home/olivier/.nuget/packages/matblazor/2.9.0-develop-042/staticwebassets/" />
+  <ContentRoot BasePath="/" Path="/home/olivier/dev/BlazorWasmGitHub/Client/bin/Debug/net6.0/wwwroot/" />
+  <ContentRoot BasePath="/" Path="/home/olivier/dev/BlazorWasmGitHub/Client/obj/Debug/net6.0/blazor/" />
+  <ContentRoot BasePath="/" Path="/home/olivier/dev/BlazorWasmGitHub/Client/obj/Debug/net6.0/scopedcss/bundle/" />
+  <ContentRoot BasePath="/" Path="/home/olivier/dev/BlazorWasmGitHub/Client/obj/Debug/net6.0/scopedcss/projectbundle/" />
+</StaticWebAssets>
