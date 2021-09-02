@@ -158,7 +158,7 @@
         },
         "Patterns": null
       },
-      "_content": {
+      "content": {
         "Children": {
           "MatBlazor": {
             "Children": {
