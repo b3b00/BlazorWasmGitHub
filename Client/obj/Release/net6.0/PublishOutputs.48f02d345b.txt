@@ -1,1 +1,0 @@
-/home/olivier/dev/BlazorWasmGitHub/release/web.config
