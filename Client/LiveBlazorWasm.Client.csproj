@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
-  <PropertyGroup>
+ <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <RunAOTCompilation>true</RunAOTCompilation>
   </PropertyGroup>
-  
-  <!-- <RunAOTCompilation>true</RunAOTCompilation> -->
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.1.2" />
